@@ -47,19 +47,22 @@ int main() {
 
         struct timeval tv, tv_end;
         gettimeofday(&tv, NULL);
-        cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, count, count, count, 1, a, count, b, count, 0, c, count);
+        cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, count,
+                count, count, 1, a, count, b, count, 0, c, count);
         gettimeofday(&tv_end, NULL);
 
-        uint64_t mics_blas = (tv_end.tv_sec * MIC_IN_SEC + tv_end.tv_usec) - (tv.tv_sec * MIC_IN_SEC + tv.tv_usec);
+        uint64_t mics_blas = (tv_end.tv_sec * MIC_IN_SEC + tv_end.tv_usec) -
+                             (tv.tv_sec * MIC_IN_SEC + tv.tv_usec);
         
         struct timeval tv2, tv_end2;
         gettimeofday(&tv2, NULL);
         mmul(a, b, c2, count);
         gettimeofday(&tv_end2, NULL);
-        uint64_t mics_hand = (tv_end2.tv_sec * MIC_IN_SEC + tv_end2.tv_usec) - (tv2.tv_sec * MIC_IN_SEC + tv2.tv_usec);
+        uint64_t mics_hand = (tv_end2.tv_sec * MIC_IN_SEC + tv_end2.tv_usec) -
+                             (tv2.tv_sec * MIC_IN_SEC + tv2.tv_usec);
 
-        printf("size: %lu spent %lu\n", count, mics_blas);
-        printf("size: %lu spent %lu\n", count, mics_hand);
+        printf("BLAS\tsize: %lu\tspent %lu\n", count, mics_blas);
+        printf("MANUAL\tsize: %lu\tspent %lu\n", count, mics_hand);
 
         printf("%lf %lf\n", c[0], c2[0]);
     }
